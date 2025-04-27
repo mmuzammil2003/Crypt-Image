@@ -4,13 +4,26 @@
 {% block title %}SecVault
 
 {% endblock title %}
+
 {% block content %}
-    <h1>Upload Photo or Video</h1>
+    <h1>Upload a File</h1>
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        <input type="file" name="file" required><br><br>
+        {{ form.as_p }}
         <button type="submit">Upload</button>
     </form>
-    <br>
-    <a href="{% url 'list_files' %}">View Uploaded Files</a>
+
+    <h2>Your Uploaded Files</h2>
+    {% if files %}
+        <ul>
+            {% for file in files %}
+                <li>
+                    <a href="{% url 'download_file' file.id %}">{{ file.file.name }}</a>
+                    (Uploaded at: {{ file.uploaded_at|date:"Y-m-d H:i" }})
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No files uploaded yet.</p>
+    {% endif %}
 {% endblock %}
