@@ -18,7 +18,7 @@
         <ul>
             {% for file in files %}
                 <li>
-                    <a href="{% url 'download_file' file.id %}">{{ file.file.name }}</a>
+                    <a href="{% url 'list_files' file.id %}">{{ file.file.name }}</a>
                     (Uploaded at: {{ file.uploaded_at|date:"Y-m-d H:i" }})
                 </li>
             {% endfor %}

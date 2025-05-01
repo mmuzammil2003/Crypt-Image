@@ -8,6 +8,15 @@
 <body>
     <nav>
         <a href="{% url 'home' %}">Home</a>
+        {% if user.is_authenticated %}
+            <form method="POST" action="{% url 'logout' %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+        <a href="{% url "list_files" %}">MyFiles</a>
     </nav>
     <hr>
     {% block content %}
