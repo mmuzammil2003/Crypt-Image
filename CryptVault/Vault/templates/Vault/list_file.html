@@ -8,27 +8,27 @@
         <ul>
             {% for file in files %}
                 <li>
-                    <a href="#" data-file-id="{{ file.id }}" class="download-link">{{ file.file.name }}</a> 
+                    <!-- Display the file name with a link to download -->
+                    <a href="{% url 'download_file' file.id %}">
+                        {{ file.file.name|slice:":-4" }} <!-- Display the file name without the extension -->
+                    </a>
+                    
+                    <!-- Display the upload date and time -->
                     (Uploaded at: {{ file.uploaded_at|date:"Y-m-d H:i" }})
+
+                    <!-- Password form for file download -->
+                    <form method="POST" action="{% url 'download_file' file.id %}">
+                        {% csrf_token %}
+                        <label for="password_{{ file.id }}">Enter Password:</label>
+                        <input type="password" name="password" id="password_{{ file.id }}" placeholder="Password" required />
+                        <button type="submit">Download</button>
+                    </form>
                 </li>
             {% endfor %}
         </ul>
     {% else %}
         <p>No files uploaded yet.</p>
     {% endif %}
-
-    <br>
-    <a href="{% url 'home' %}">Upload New File</a>
-
-    <!-- Modal for password -->
-    <div id="password-modal" style="display:none;">
-        <div>
-            <h3>Enter Password to Download File</h3>
-            <input type="password" id="file-password" placeholder="Password">
-            <button id="submit-password">Submit</button>
-        </div>
-    </div>
-
 {% endblock %}
 
 {% block extra_js %}

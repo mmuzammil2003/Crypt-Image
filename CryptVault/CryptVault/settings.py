@@ -127,3 +127,11 @@ import os
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
+import base64
+from django.core.management.utils import get_random_secret_key
+
+# Generate this once and save it securely. Use base64-encoded 32-byte key.
+ENCRYPTION_KEY = b'lFbf2BIGUCX2u737AtwNpwz46l4zxdD74oOF_nPZZPU='
+
+
+

@@ -1,56 +1,59 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Select all download links (file items)
+document.addEventListener('DOMContentLoaded', function () {
+    let currentFileId = null;
+
     const downloadLinks = document.querySelectorAll('.download-link');
+    const modal = document.getElementById('password-modal');
+    const submitBtn = document.getElementById('submit-password');
+    const passwordInput = document.getElementById('file-password');
 
+    // Attach click listeners to each download link
     downloadLinks.forEach(link => {
-        link.addEventListener('click', function(event) {
-            event.preventDefault();  // Prevent default behavior
-
-            // Get the file ID from the data attribute
-            const fileId = link.getAttribute('data-file-id');
-            
-            // Show the modal
-            const modal = document.getElementById('password-modal');
+        link.addEventListener('click', function (event) {
+            event.preventDefault();
+            currentFileId = link.getAttribute('data-file-id');
+            passwordInput.value = '';  // Clear previous input
             modal.style.display = 'block';
+        });
+    });
 
-            // Handle submit password button click
-            document.getElementById('submit-password').addEventListener('click', function() {
-                const password = document.getElementById('file-password').value;
-                
-                // Send the password to the server via POST
-                fetch(`/file/download/${fileId}/`, {
-                    method: 'POST',
-                    body: new URLSearchParams({
-                        'password': password
-                    }),
-                    headers: {
-                        'X-CSRFToken': document.querySelector('[name="csrfmiddlewaretoken"]').value
-                    }
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        alert("Invalid password or an error occurred.");
-                        return;
-                    }
+    // Attach one listener to the submit button
+    submitBtn.addEventListener('click', function () {
+        const password = passwordInput.value;
+        if (!currentFileId || !password) {
+            alert("Password is required.");
+            return;
+        }
 
-                    return response.blob();  // Convert the response to a blob (binary data)
-                })
-                .then(blob => {
-                    if (blob) {
-                        // Create a download link and trigger the download
-                        const link = document.createElement('a');
-                        const downloadUrl = window.URL.createObjectURL(blob);
-                        link.href = downloadUrl;
-                        link.download = `file_${fileId}`;  // You can modify this filename as needed
-                        link.click();
-                        modal.style.display = 'none';  // Hide the modal after download
-                    }
-                })
-                .catch(error => {
-                    console.error("Download failed:", error);
-                    alert("Error occurred during file download.");
-                });
-            });
+        fetch(`/file/download/${currentFileId}/`, {
+            method: 'POST',
+            body: new URLSearchParams({
+                'password': password
+            }),
+            headers: {
+                'X-CSRFToken': document.querySelector('[name="csrfmiddlewaretoken"]').value
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Invalid password or download error.");
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            if (blob) {
+                const downloadUrl = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = `file_${currentFileId}`; // Set the filename as needed
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                modal.style.display = 'none';
+            }
+        })
+        .catch(error => {
+            console.error("Download failed:", error);
+            alert("Error occurred during file download.");
         });
     });
 });
