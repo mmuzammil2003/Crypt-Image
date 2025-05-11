@@ -1,29 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vault</title>
-    {% block title %}{% endblock title %}
-    {% block extra_css %}
-{% endblock %}
-
-</head>
-<body>
-    <nav>
-        <a href="{% url 'home' %}">Home</a>
-        {% if user.is_authenticated %}
-            <form method="POST" action="{% url 'logout' %}" style="display: inline;">
-                {% csrf_token %}
-                <button type="submit">Logout</button>
-            </form>
-        {% else %}
-            <a href="{% url 'login' %}">Login</a>
-        {% endif %}
-        <a href="{% url "list_files" %}">MyFiles</a>
-    </nav>
-    <hr>
-    {% block content %}
-    {% endblock %}
-</body>
+<!DOCTYPE html> 
+{% load static %} 
+<html lang="en"> 
+<head>     
+    <meta charset="UTF-8">     
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">     
+    <title>Vault</title>     
+    <link rel="stylesheet" href="{% static 'Vault/css/navbar.css' %}">     
+    <link rel="stylesheet" href="{% static 'Vault/css/footer.css' %}"> 
+    {% block title %}{% endblock title %}     
+    {% block extra_css %} {% endblock %}  
+</head> 
+<body>     
+    <nav>     
+        <a href="{% url 'home' %}" class="logo-container">
+            <img src="{% static 'Vault/images/logo.png' %}" alt="Vault Logo" class="vault-logo">
+        </a>          
+        {% if user.is_authenticated %}             
+            <form method="POST" action="{% url 'logout' %}" style="display: inline;">                 
+                {% csrf_token %}                 
+                <button type="submit">Logout</button>             
+            </form>         
+        {% else %}             
+            <a href="{% url 'login' %}">Login</a>         
+        {% endif %}         
+        <a href="{% url "list_files" %}">MyFiles</a>     
+    </nav>     
+    <hr>     
+    <main>
+        {% block content %}     
+        {% endblock %}     
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Vault</h3>
+                <p>Your secure file storage solution.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'list_files' %}">My Files</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="#">Account Settings</a></li>
+                    {% else %}
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p>Email: muzammilamir03@gmail.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; {% now "Y" %} Vault. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    {% block extra_js %}{% endblock  %} 
+</body> 
 </html>

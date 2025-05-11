@@ -1,0 +1,212 @@
+/* register.css - File Vault Registration Page Styling */
+
+:root {
+  --primary-color: #2c3e50;
+  --secondary-color: #3498db;
+  --success-color: #2ecc71;
+  --accent-color: #9b59b6;
+  --bg-color: #f9f9f9;
+  --card-bg: #ffffff;
+  --text-color: #333333;
+  --border-color: #e0e0e0;
+  --error-color: #e74c3c;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --input-focus: 0 0 0 3px rgba(46, 204, 113, 0.2);
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-color);
+  background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background-attachment: fixed;
+  color: var(--text-color);
+  line-height: 1.6;
+  margin: 0;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 500px;
+  margin: 60px auto;
+  padding: 40px;
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(to right, var(--success-color), var(--accent-color));
+}
+
+h2 {
+  color: var(--primary-color);
+  margin-bottom: 30px;
+  font-size: 28px;
+  text-align: center;
+  font-weight: 600;
+  position: relative;
+}
+
+h2::after {
+  content: "🔒";
+  font-size: 24px;
+  position: absolute;
+  margin-left: 10px;
+  opacity: 0.8;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--primary-color);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s;
+  box-sizing: border-box;
+  background-color: #f8f9fa;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: var(--success-color);
+  box-shadow: var(--input-focus);
+  background-color: white;
+}
+
+.btn {
+  display: inline-block;
+  font-weight: 500;
+  text-align: center;
+  padding: 14px 24px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+  margin-right: 10px;
+  letter-spacing: 0.5px;
+}
+
+.btn-success {
+  background-color: var(--success-color);
+  color: white;
+  box-shadow: 0 4px 6px rgba(46, 204, 113, 0.2);
+  width: 100%;
+  margin-top: 10px;
+}
+
+.btn-success:hover {
+  background-color: #27ae60;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(46, 204, 113, 0.3);
+}
+
+/* Error styling */
+.errorlist {
+  color: var(--error-color);
+  list-style: none;
+  padding: 0;
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.non-field-errors {
+  background-color: rgba(231, 76, 60, 0.1);
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  color: var(--error-color);
+  border-left: 4px solid var(--error-color);
+}
+
+/* Password strength indicator styles */
+.password-strength {
+  height: 5px;
+  margin-top: 8px;
+  border-radius: 3px;
+  background-color: #eee;
+  overflow: hidden;
+}
+
+.password-strength-meter {
+  height: 100%;
+  width: 0;
+  transition: width 0.3s, background-color 0.3s;
+}
+
+.strength-weak {
+  width: 33%;
+  background-color: #ff4757;
+}
+
+.strength-medium {
+  width: 66%;
+  background-color: #ffa502;
+}
+
+.strength-strong {
+  width: 100%;
+  background-color: #2ed573;
+}
+
+/* Helpful password tips */
+.password-tips {
+  font-size: 13px;
+  color: #7f8c8d;
+  margin-top: 8px;
+  padding: 8px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  border-left: 3px solid var(--secondary-color);
+}
+
+/* Animation effects */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.container {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 550px) {
+  .container {
+    margin: 30px 15px;
+    padding: 30px 20px;
+  }
+  
+  h2 {
+    font-size: 24px;
+  }
+  
+  .btn {
+    display: block;
+    width: 100%;
+    margin-right: 0;
+  }
+}

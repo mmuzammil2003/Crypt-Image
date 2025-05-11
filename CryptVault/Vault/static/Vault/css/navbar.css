@@ -1,0 +1,191 @@
+/* navbar.css - Navigation Bar Styling for Vault Application */
+
+:root {
+  --primary-color: #2c3e50;
+  --secondary-color: #3498db;
+  --accent-color: #f1c40f;
+  --bg-color: #f9f9f9;
+  --nav-bg: #2c3e50;
+  --nav-text: #ecf0f1;
+  --nav-hover: #f1c40f;
+  --nav-active: #3498db;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Navigation Bar Container */
+nav {
+  background-color: var(--nav-bg);
+  padding: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Logo/Brand Styling (First Nav Item) */
+nav a:first-child {
+  margin-right: auto;
+  font-weight: 700;
+  font-size: 1.25rem;
+  position: relative;
+  padding-left: 40px;
+}
+
+/* Logo Icon */
+nav a:first-child::before {
+  content: "🔒";
+  font-size: 1.5rem;
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Navigation Links */
+nav a {
+  color: var(--nav-text);
+  text-decoration: none;
+  padding: 20px 24px;
+  display: inline-block;
+  transition: var(--transition);
+  position: relative;
+  font-weight: 500;
+}
+
+nav a:hover {
+  color: var(--nav-hover);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Active Navigation Link */
+nav a.active {
+  color: var(--nav-active);
+  background-color: rgba(52, 152, 219, 0.1);
+}
+
+/* Active Link Indicator */
+nav a.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--nav-active);
+}
+
+/* Logout Button Styling */
+nav form {
+  margin: 0;
+  padding: 0;
+}
+
+nav button[type="submit"] {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--nav-text);
+  padding: 8px 15px;
+  margin: 0 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: var(--transition);
+  font-weight: 500;
+}
+
+nav button[type="submit"]:hover {
+  background-color: rgba(231, 76, 60, 0.8);
+  border-color: transparent;
+  color: white;
+}
+
+/* Remove the horizontal rule since we have a shadow on the nav */
+hr {
+  display: none;
+}
+
+/* Add subtle hover animation */
+nav a::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 3px;
+  background-color: var(--nav-hover);
+  transition: var(--transition);
+  transform: translateX(-50%);
+}
+
+nav a:hover::before {
+  width: 80%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 10px 0;
+  }
+  
+  nav a:first-child {
+    flex-basis: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+    margin-right: 0;
+    padding: 10px;
+  }
+  
+  nav a:first-child::before {
+    position: static;
+    margin-right: 10px;
+    transform: none;
+  }
+  
+  nav a, nav button[type="submit"] {
+    padding: 10px 15px;
+    margin: 5px;
+  }
+}
+/* Logo Styling for Vault */
+.vault-logo {
+  height: 40px;
+  vertical-align: middle;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.vault-logo:hover {
+  transform: scale(1.05);
+}
+
+/* Logo container styling */
+.logo-container {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 20px;
+  height: 100%;
+}
+
+/* Ensure logo is properly positioned within navbar */
+nav a:first-child {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+/* Optional: Add a subtle shadow effect on hover */
+.vault-logo:hover {
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.2));
+}

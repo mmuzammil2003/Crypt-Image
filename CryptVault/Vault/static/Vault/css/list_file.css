@@ -1,0 +1,233 @@
+/* file_list.css - File Vault Listing Page Styling */
+
+:root {
+  --primary-color: #2c3e50;
+  --secondary-color: #3498db;
+  --accent-color: #9b59b6;
+  --success-color: #2ecc71;
+  --warning-color: #f39c12;
+  --bg-color: #f9f9f9;
+  --card-bg: #ffffff;
+  --list-item-bg: #ffffff;
+  --list-item-hover: #f7fbfe;
+  --text-color: #333333;
+  --text-light: #7f8c8d;
+  --border-color: #e0e0e0;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --input-focus: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  color: var(--primary-color);
+  margin: 30px 0;
+  font-size: 32px;
+  font-weight: 600;
+  text-align: center;
+  position: relative;
+}
+
+h1::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(to right, var(--secondary-color), var(--accent-color));
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+
+/* File listing container */
+.files-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* File listing styles */
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 30px 0;
+}
+
+li {
+  background-color: var(--list-item-bg);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+  padding: 0;
+  transition: transform 0.3s, box-shadow 0.3s;
+  overflow: hidden;
+}
+
+li:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* File info section */
+.file-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.file-name {
+  flex: 1;
+}
+
+.file-name a {
+  color: var(--primary-color);
+  font-size: 18px;
+  font-weight: 500;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  transition: color 0.3s;
+}
+
+.file-name a:hover {
+  color: var(--secondary-color);
+}
+
+.file-name a::before {
+  content: "📄";
+  margin-right: 12px;
+  font-size: 22px;
+}
+
+.file-date {
+  color: var(--text-light);
+  font-size: 14px;
+  margin-left: 20px;
+}
+
+/* Password form section */
+form {
+  padding: 20px 25px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 15px;
+  background-color: #f8f9fa;
+}
+
+label {
+  font-weight: 500;
+  color: var(--primary-color);
+  margin-right: 10px;
+}
+
+input[type="password"] {
+  flex: 1;
+  min-width: 200px;
+  padding: 12px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 15px;
+  transition: all 0.3s;
+}
+
+input[type="password"]:focus {
+  outline: none;
+  border-color: var(--secondary-color);
+  box-shadow: var(--input-focus);
+}
+
+button[type="submit"] {
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: 500;
+}
+
+button[type="submit"]:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
+}
+
+/* Empty state */
+p {
+  text-align: center;
+  color: var(--text-light);
+  font-size: 18px;
+  margin: 50px 0;
+  padding: 30px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+}
+
+/* File type icons - can be expanded based on file types */
+.file-pdf::before {
+  content: "📕" !important;
+}
+
+.file-doc::before, .file-docx::before {
+  content: "📘" !important;
+}
+
+.file-xls::before, .file-xlsx::before {
+  content: "📗" !important;
+}
+
+.file-img::before, .file-jpg::before, .file-png::before {
+  content: "📷" !important;
+}
+
+.file-zip::before, .file-rar::before {
+  content: "📦" !important;
+}
+
+/* Animation for newly added files */
+@keyframes highlight {
+  0% { background-color: rgba(46, 204, 113, 0.2); }
+  100% { background-color: var(--list-item-bg); }
+}
+
+.new-file {
+  animation: highlight 2s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .file-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .file-date {
+    margin-left: 36px;
+    margin-top: 5px;
+  }
+  
+  form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  label {
+    margin-bottom: 5px;
+  }
+  
+  input[type="password"], button[type="submit"] {
+    width: 100%;
+  }
+}

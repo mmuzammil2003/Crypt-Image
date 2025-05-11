@@ -23,9 +23,11 @@ class RegistrationForm(UserCreationForm):
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'})
     )
     password1 = forms.CharField(
+        label="password",
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'})
     )
     password2 = forms.CharField(
+        label="confirmPassword",
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm Password'})
     )
 
