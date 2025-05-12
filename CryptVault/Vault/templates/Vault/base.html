@@ -11,53 +11,88 @@
     {% block extra_css %} {% endblock %}  
 </head> 
 <body>     
-    <nav>     
-        <a href="{% url 'home' %}" class="logo-container">
-            <img src="{% static 'Vault/images/logo.png' %}" alt="Vault Logo" class="vault-logo">
-        </a>          
-        {% if user.is_authenticated %}             
-            <form method="POST" action="{% url 'logout' %}" style="display: inline;">                 
-                {% csrf_token %}                 
-                <button type="submit">Logout</button>             
-            </form>         
-        {% else %}             
-            <a href="{% url 'login' %}">Login</a>         
-        {% endif %}         
-        <a href="{% url "list_files" %}">MyFiles</a>     
-    </nav>     
+    <nav>
+    <a href="{% url 'home' %}" class="logo-container">
+        <img src="{% static 'Vault/images/logo.png' %}" alt="Vault Logo" class="vault-logo">
+    </a>
+
+    {% if user.is_authenticated %}
+        <div class="nav-actions">
+            <a href="{% url "list_files" %}">MyFiles</a>
+            <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        </div>
+    {% else %}
+        <a href="{% url 'login' %}">Login</a>
+    {% endif %}
+    </nav> 
     <hr>     
     <main>
         {% block content %}     
         {% endblock %}     
     </main>
     
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Vault</h3>
-                <p>Your secure file storage solution.</p>
+  <footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-primary">
+            <div class="footer-brand">
+                <h3>CryptVault</h3>
+                <p class="tagline">Advanced encryption for secure file storage solutions</p>
             </div>
-            <div class="footer-section">
-                <h3>Quick Links</h3>
+            <div class="footer-links">
+                <div class="link-group">
+                    <h4>Solutions</h4>
+                    <ul>
+                        <li><a href="/personal">Personal Storage</a></li>
+                        <li><a href="/business">Business Solutions</a></li>
+                        <li><a href="/enterprise">Enterprise Security</a></li>
+                    </ul>
+                </div>
+                <div class="link-group">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/careers">Careers</a></li>
+                        <li><a href="/press">Press</a></li>
+                    </ul>
+                </div>
+                <div class="link-group">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="/documentation">Documentation</a></li>
+                        <li><a href="/support">Support</a></li>
+                        <li><a href="/blog">Blog</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-secondary">
+            <div class="contact-information">
+                <h4>Contact Us</h4>
+                <address>
+                    <p>Email: <a href="mailto:support@cryptvault.com">support@cryptvault.com</a></p>
+                    <p>Phone: +1 (800) 555-0123</p>
+                    <p>Address: 123 Security Ave, Suite 400, Cyber City, CS 90210</p>
+                </address>
+            </div>
+            <div class="legal-information">
+                <h4>Legal</h4>
                 <ul>
-                    <li><a href="{% url 'home' %}">Home</a></li>
-                    <li><a href="{% url 'list_files' %}">My Files</a></li>
-                    {% if user.is_authenticated %}
-                    <li><a href="#">Account Settings</a></li>
-                    {% else %}
-                    <li><a href="{% url 'login' %}">Login</a></li>
-                    {% endif %}
+                    <li><a href="/privacy">Privacy Policy</a></li>
+                    <li><a href="/terms">Terms of Service</a></li>
+                    <li><a href="/compliance">Compliance</a></li>
                 </ul>
             </div>
-            <div class="footer-section">
-                <h3>Contact</h3>
-                <p>Email: muzammilamir03@gmail.com</p>
-            </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; {% now "Y" %} Vault. All rights reserved.</p>
-        </div>
-    </footer>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; {% now "Y" %} CryptVault. All rights reserved.</p>
+        <p>CryptVault is ISO 27001 certified and GDPR compliant.</p>
+    </div>
+</footer>
+
     
     {% block extra_js %}{% endblock  %} 
 </body> 

@@ -1,39 +1,306 @@
 {% extends 'Vault/base.html' %}
 {% load static %}
+
 {% block title %}
-<link rel="stylesheet" href="{% static "Vault/css/list_file.css" %}">
-{% endblock  %}
+<title>Secure File Vault - Your Files</title>
+<link rel="stylesheet" href="{% static 'Vault/css/list_file.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
 
 {% block content %}
-    <h1>Uploaded Files</h1>
+<div class="vault-container">
+    <div class="overlay"></div>
+    <img src="{% static 'Vault/images/login_vault.jpg' %}" alt="Secure Vault Background" class="background-image">
+    
+    <div class="content-wrapper">
+        <header class="vault-header">
+            <h1><i class="fas fa-shield-alt"></i> Secure File Vault</h1>
+            <p class="subtitle">Your files are protected and encrypted</p>
+        </header>
 
-    {% if files %}
-        <ul>
-            {% for file in files %}
-                <li>
-                    <!-- Display the file name with a link to download -->
-                    <a href="{% url 'download_file' file.id %}">
-                        {{ file.file.name|slice:":-4" }} <!-- Display the file name without the extension -->
+        <div class="search-container">
+            <input type="text" id="fileSearch" class="search-input" placeholder="Search files...">
+            <i class="fas fa-search search-icon"></i>
+        </div>
+
+        <div class="files-container">
+            <div class="files-header">
+                <div class="sort-options">
+                    <span>Sort by:</span>
+                    <button class="sort-btn active" data-sort="name">Name</button>
+                    <button class="sort-btn" data-sort="date">Date</button>
+                </div>
+                <div class="view-toggle">
+                    <button class="view-btn active" data-view="list"><i class="fas fa-list"></i></button>
+                    <button class="view-btn" data-view="grid"><i class="fas fa-th-large"></i></button>
+                </div>
+            </div>
+
+            {% if files %}
+                <div class="file-list" id="fileList">
+                    {% for file in files %}
+                        <div class="file-item" data-filename="{{ file.file.name|slice:':' }}" data-date="{{ file.uploaded_at|date:'Y-m-d H:i' }}">
+                            <div class="file-icon">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div class="file-details">
+                                <h3 class="file-name">{{ file.file.name|slice:':' }}</h3>
+                                <p class="file-meta">
+                                    <span class="upload-date"><i class="far fa-clock"></i> {{ file.uploaded_at|date:"F d, Y • H:i" }}</span>
+                                </p>
+                                <div class="file-actions">
+                                    <form method="POST" action="{% url 'download_file' file.id %}" class="password-form">
+                                        {% csrf_token %}
+                                        <div class="password-input-group">
+                                            <input type="password" name="password" id="password_{{ file.id }}" placeholder="Enter password to download" required />
+                                            <button type="submit" class="download-btn">
+                                                <i class="fas fa-lock-open"></i> Unlock & Download
+                                            </button>
+                                        </div>
+                                    </form>
+                                    <div class="secondary-actions">
+                                        <button class="preview-btn" title="Preview if available" data-fileid="{{ file.id }}">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="share-btn" title="Share file" data-fileid="{{ file.id }}">
+                                            <i class="fas fa-share-alt"></i>
+                                        </button>
+                                        <button class="delete-btn" title="Delete file" data-fileid="{{ file.id }}">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-folder-open empty-icon"></i>
+                    <h2>No files uploaded yet</h2>
+                    <p>Your secure vault is empty. Upload files to get started.</p>
+                    <a href="{% url 'upload_file' %}" class="upload-btn">
+                        <i class="fas fa-cloud-upload-alt"></i> Upload New File
                     </a>
-                    
-                    <!-- Display the upload date and time -->
-                    (Uploaded at: {{ file.uploaded_at|date:"Y-m-d H:i" }})
+                </div>
+            {% endif %}
+        </div>
+    </div>
 
-                    <!-- Password form for file download -->
-                    <form method="POST" action="{% url 'download_file' file.id %}">
-                        {% csrf_token %}
-                        <label for="password_{{ file.id }}">Enter Password:</label>
-                        <input type="password" name="password" id="password_{{ file.id }}" placeholder="Password" required />
-                        <button type="submit">Download</button>
-                    </form>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No files uploaded yet.</p>
-    {% endif %}
+    <!-- File Preview Modal -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 id="previewFileName">File Preview</h2>
+            <div id="previewContent" class="preview-content">
+                <!-- Preview content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div id="shareModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Share File</h2>
+            <p>Generate a secure link to share this file:</p>
+            <div class="share-options">
+                <div class="expiry-setting">
+                    <label for="expiryTime">Link expires after:</label>
+                    <select id="expiryTime">
+                        <option value="1">1 hour</option>
+                        <option value="24" selected>24 hours</option>
+                        <option value="72">3 days</option>
+                        <option value="168">7 days</option>
+                    </select>
+                </div>
+                <div class="password-setting">
+                    <label for="sharePassword">Require password:</label>
+                    <input type="checkbox" id="passwordRequired" checked>
+                    <input type="password" id="sharePassword" placeholder="Set password for recipient">
+                </div>
+                <button id="generateShareLink" class="primary-btn">Generate Secure Link</button>
+            </div>
+            <div id="shareLink" class="share-link-container hidden">
+                <input type="text" id="shareLinkInput" readonly>
+                <button id="copyShareLink" class="copy-btn">
+                    <i class="fas fa-copy"></i> Copy
+                </button>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block extra_js %}
-    <script src="{% static 'Vault/js/file_download.js' %}"></script>
+<script src="{% static 'Vault/js/file_download.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Search functionality
+        const searchInput = document.getElementById('fileSearch');
+        const fileItems = document.querySelectorAll('.file-item');
+        
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            
+            fileItems.forEach(item => {
+                const fileName = item.dataset.filename.toLowerCase();
+                if (fileName.includes(searchTerm)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+        
+        // Sorting functionality
+        const sortButtons = document.querySelectorAll('.sort-btn');
+        sortButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Update active button
+                sortButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                const sortBy = this.dataset.sort;
+                const fileList = document.getElementById('fileList');
+                const items = Array.from(fileList.children);
+                
+                items.sort((a, b) => {
+                    if (sortBy === 'name') {
+                        return a.dataset.filename.localeCompare(b.dataset.filename);
+                    } else if (sortBy === 'date') {
+                        return new Date(b.dataset.date) - new Date(a.dataset.date);
+                    }
+                });
+                
+                items.forEach(item => fileList.appendChild(item));
+            });
+        });
+        
+        // View toggle functionality
+        const viewButtons = document.querySelectorAll('.view-btn');
+        const fileList = document.getElementById('fileList');
+        
+        viewButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Update active button
+                viewButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                const view = this.dataset.view;
+                if (view === 'grid') {
+                    fileList.classList.add('grid-view');
+                } else {
+                    fileList.classList.remove('grid-view');
+                }
+            });
+        });
+        
+        // Modal functionality
+        const modals = document.querySelectorAll('.modal');
+        const closeBtns = document.querySelectorAll('.close-modal');
+        
+        // Preview button functionality
+        const previewBtns = document.querySelectorAll('.preview-btn');
+        const previewModal = document.getElementById('previewModal');
+        const previewFileName = document.getElementById('previewFileName');
+        const previewContent = document.getElementById('previewContent');
+        
+        previewBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const fileId = this.dataset.fileid;
+                const fileName = this.closest('.file-item').querySelector('.file-name').textContent;
+                
+                previewFileName.textContent = `Preview: ${fileName}`;
+                previewContent.innerHTML = '<div class="loading">Loading preview...</div>';
+                previewModal.style.display = 'block';
+                
+                // Mock preview functionality (in real implementation, you would fetch the actual preview)
+                setTimeout(() => {
+                    previewContent.innerHTML = '<div class="preview-message">Preview not available for this file type. Please download to view.</div>';
+                }, 1000);
+            });
+        });
+        
+        // Share button functionality
+        const shareBtns = document.querySelectorAll('.share-btn');
+        const shareModal = document.getElementById('shareModal');
+        const generateShareBtn = document.getElementById('generateShareLink');
+        const shareLinkContainer = document.getElementById('shareLink');
+        const shareLinkInput = document.getElementById('shareLinkInput');
+        const copyShareLinkBtn = document.getElementById('copyShareLink');
+        
+        shareBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                shareModal.style.display = 'block';
+                shareLinkContainer.classList.add('hidden');
+            });
+        });
+        
+        generateShareBtn.addEventListener('click', function() {
+            const expiryTime = document.getElementById('expiryTime').value;
+            const requirePassword = document.getElementById('passwordRequired').checked;
+            const password = document.getElementById('sharePassword').value;
+            
+            // Generate a mock share link (in production, this would be a real secure link)
+            const mockShareLink = `https://yourdomain.com/share/secure-${Math.random().toString(36).substring(2, 15)}?expires=${expiryTime}h`;
+            shareLinkInput.value = mockShareLink;
+            shareLinkContainer.classList.remove('hidden');
+        });
+        
+        copyShareLinkBtn.addEventListener('click', function() {
+            shareLinkInput.select();
+            document.execCommand('copy');
+            this.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            setTimeout(() => {
+                this.innerHTML = '<i class="fas fa-copy"></i> Copy';
+            }, 2000);
+        });
+        
+        // Delete button functionality (mock)
+        const deleteBtns = document.querySelectorAll('.delete-btn');
+        deleteBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const fileItem = this.closest('.file-item');
+                const fileName = fileItem.querySelector('.file-name').textContent;
+                
+                if (confirm(`Are you sure you want to delete "${fileName}"? This action cannot be undone.`)) {
+                    // Mock deletion animation
+                    fileItem.style.opacity = '0';
+                    setTimeout(() => {
+                        fileItem.style.height = '0';
+                        fileItem.style.margin = '0';
+                        fileItem.style.padding = '0';
+                        fileItem.style.overflow = 'hidden';
+                    }, 300);
+                    setTimeout(() => {
+                        fileItem.remove();
+                        if (document.querySelectorAll('.file-item').length === 0) {
+                            location.reload(); // Reload to show empty state
+                        }
+                    }, 600);
+                    
+                    // In production, you would send a delete request to the server here
+                }
+            });
+        });
+        
+        // Close modals
+        closeBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                modals.forEach(modal => {
+                    modal.style.display = 'none';
+                });
+            });
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
 {% endblock %}

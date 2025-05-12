@@ -1,0 +1,207 @@
+/* navbar.css - Enhanced Navigation Bar Styling for Vault Application */
+:root {
+  --primary-color: #1a2b3c;
+  --secondary-color: #4a90e2;
+  --accent-color: #48dbfb;
+  --bg-color: #f4f6f7;
+  --nav-bg: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  --nav-text: #ecf0f1;
+  --nav-hover: #48dbfb;
+  --nav-active: #4a90e2;
+  --shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-color);
+}
+
+/* Navigation Bar Container */
+nav {
+  background: var(--nav-bg);
+  padding: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Logo/Brand Styling (First Nav Item) */
+nav a:first-child {
+  margin-right: auto;
+  font-weight: 700;
+  font-size: 1.25rem;
+  position: relative;
+  padding-left: 40px;
+  color: var(--nav-text);
+  transition: var(--transition);
+}
+
+/* Logo Icon */
+nav a:first-child::before {
+  content: "🔒";
+  font-size: 1.5rem;
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Navigation Links */
+nav a {
+  color: var(--nav-text);
+  text-decoration: none;
+  padding: 20px 24px;
+  display: inline-block;
+  transition: var(--transition);
+  position: relative;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+nav a:hover {
+  color: var(--nav-hover);
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Active Navigation Link */
+nav a.active {
+  color: var(--nav-active);
+  opacity: 1;
+  background-color: rgba(74, 144, 226, 0.1);
+}
+
+/* Active Link Indicator */
+nav a.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--nav-active);
+  transform: scaleX(1);
+}
+
+/* Logout Button Styling */
+nav form {
+  margin: 0;
+  padding: 0;
+}
+
+nav button[type="submit"] {
+  background-color: transparent;
+  border: 2px solid var(--secondary-color);
+  color: var(--nav-text);
+  padding: 10px 20px;
+  margin: 0 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: var(--transition);
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+}
+
+nav button[type="submit"]::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background-color: var(--secondary-color);
+  transition: var(--transition);
+  z-index: -1;
+}
+
+nav button[type="submit"]:hover {
+  color: white;
+}
+
+nav button[type="submit"]:hover::before {
+  left: 0;
+}
+
+/* Hover Animation for Navigation Links */
+nav a::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 3px;
+  background-color: var(--nav-hover);
+  transition: var(--transition);
+  transform: translateX(-50%);
+}
+
+nav a:hover::before {
+  width: 80%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 10px 0;
+  }
+  
+  nav a:first-child {
+    flex-basis: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+    margin-right: 0;
+    padding: 10px;
+  }
+  
+  nav a:first-child::before {
+    position: static;
+    margin-right: 10px;
+    transform: none;
+  }
+  
+  nav a, nav button[type="submit"] {
+    padding: 10px 15px;
+    margin: 5px;
+  }
+}
+
+/* Logo Styling for Vault */
+.vault-logo {
+  height: 40px;
+  vertical-align: middle;
+  transition: var(--transition);
+  display: inline-block;
+  filter: brightness(0.9);
+}
+
+.vault-logo:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+/* Logo container styling */
+.logo-container {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 20px;
+  height: 100%;
+}
+
+/* Ensure logo is properly positioned within navbar */
+nav a:first-child {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
