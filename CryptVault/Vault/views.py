@@ -63,29 +63,64 @@ class ListFilesView(ListView):
         return UploadedFile.objects.filter(user=self.request.user).order_by('-uploaded_at')
 
 # ----------------- File Download -----------------
+from django.core.mail import EmailMessage
+from django.core.files.base import ContentFile
+from django.http import HttpResponse, HttpResponseForbidden
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.hashers import check_password
+from cryptography.fernet import InvalidToken
+from .models import UploadedFile  # your model
+import base64
+
 def download_file(request, file_id):
-    # Retrieve the file object using the file_id from the URL
     file = get_object_or_404(UploadedFile, id=file_id)
 
-    # Check if the user is authorized to download this file
     if file.user != request.user:
         return HttpResponseForbidden("You are not authorized to download this file.")
 
-    # If the request method is POST, process the password
+    # Initialize session-based failed attempt tracking
+    session_key = f'failed_attempts_file_{file_id}'
+    failed_attempts = request.session.get(session_key, 0)
+
     if request.method == 'POST':
         user_password = request.POST.get('password')
         if not user_password:
             return HttpResponse("Password required.", status=400)
 
-        # Check if the provided password is correct
         if not check_password(user_password, file.password_hash):
+            failed_attempts += 1
+            request.session[session_key] = failed_attempts
+
+            if failed_attempts >= 3:
+                # Backup file by email before deletion
+                try:
+                    decrypted_data = file.decrypt()
+
+                    # Prepare email
+                    email = EmailMessage(
+                        subject="Backup of your file",
+                        body="You entered the wrong password 3 times. Here's a backup of your file.",
+                        to=[file.user.email]
+                    )
+                    filename = file.file.name.split("/")[-1]
+                    email.attach(filename, decrypted_data, 'application/octet-stream')
+                    email.send(fail_silently=True)
+                except Exception as e:
+                    pass  # Log this if needed
+
+                # Delete the file from the database and storage
+                file.file.delete(save=False)  # delete from storage
+                file.delete()  # delete record
+                del request.session[session_key]  # reset attempts
+                return HttpResponse("File deleted after 3 failed attempts.", status=403)
+
             return HttpResponse("Invalid password", status=403)
 
-        try:
-            # Attempt to decrypt the file
-            decrypted_data = file.decrypt()
+        # Correct password; reset attempts
+        request.session[session_key] = 0
 
-            # Return the decrypted file as a response
+        try:
+            decrypted_data = file.decrypt()
             response = HttpResponse(decrypted_data, content_type='application/octet-stream')
             filename = file.file.name.split("/")[-1]
             response['Content-Disposition'] = f'attachment; filename="{filename}"'
@@ -97,3 +132,4 @@ def download_file(request, file_id):
             return HttpResponse(f"Unexpected error: {str(e)}", status=500)
 
     return HttpResponse("Invalid request method.", status=400)
+
