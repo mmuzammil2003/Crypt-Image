@@ -1,3 +1,2 @@
 # Crypt-Image
-<img src="Crypt-Image/ss/home.jpg" alt="Alt text" width="300"/>
-
+![alt text](ss/home.jpg)
