@@ -1,0 +1,122 @@
+{% extends "Vault/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="error-page-wrapper">
+    <div class="error-container">
+        <div class="error-icon">🔒</div>
+        <span class="error-code">Error 403</span>
+        <h1>Invalid Password</h1>
+        <p>{{ message }}</p>
+        <a href="javascript:history.back()" class="btn btn-secondary">Go Back</a>
+        <a href="{% url 'list_files' %}" class="btn">Return to Files</a>
+    </div>
+</div>
+
+<style>
+    .error-page-wrapper {
+        min-height: calc(100vh - 160px); /* Adjust based on your navbar and footer heights */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+    }
+    
+    .error-container {
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+        animation: slideUp 0.5s ease-out;
+        position: relative;
+        z-index: 1;
+    }
+    
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .error-icon {
+        font-size: 64px;
+        color: #e53e3e;
+        margin-bottom: 20px;
+    }
+    
+    .error-code {
+        display: inline-block;
+        background-color: #fed7d7;
+        color: #e53e3e;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-family: monospace;
+        margin-bottom: 25px;
+        font-size: 14px;
+    }
+    
+    .error-container h1 {
+        color: #e53e3e;
+        margin-bottom: 15px;
+        font-size: 28px;
+        font-weight: 600;
+    }
+    
+    .error-container p {
+        margin-bottom: 30px;
+        line-height: 1.6;
+        color: #718096;
+        font-size: 16px;
+    }
+    
+    .btn {
+        display: inline-block;
+        background: linear-gradient(45deg, #4361EE, #4CC9F0);
+        color: white;
+        padding: 12px 25px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin: 0 10px;
+        box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
+    }
+    
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(74, 144, 226, 0.5);
+    }
+    
+    .btn-secondary {
+        background: #edf2f7;
+        color: #4a5568;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+    
+    .btn-secondary:hover {
+        background: #e2e8f0;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.08);
+    }
+    
+    @media (max-width: 480px) {
+        .error-container {
+            padding: 30px 20px;
+        }
+        
+        .btn {
+            display: block;
+            margin: 10px auto;
+            width: 80%;
+        }
+    }
+</style>
+{% endblock %}

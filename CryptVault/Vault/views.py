@@ -98,8 +98,8 @@ def download_file(request, file_id):
 
                     # Prepare email
                     email = EmailMessage(
-                        subject="Backup of your file",
-                        body="You entered the wrong password 3 times. Here's a backup of your file.",
+                        subject="Danger:BacKup you Files",
+                        body="You entered the wrong password 3 times. May be Somebody else is trying to Acquire your resources.",
                         to=[file.user.email]
                     )
                     filename = file.file.name.split("/")[-1]
@@ -112,9 +112,9 @@ def download_file(request, file_id):
                 file.file.delete(save=False)  # delete from storage
                 file.delete()  # delete record
                 del request.session[session_key]  # reset attempts
-                return HttpResponse("File deleted after 3 failed attempts.", status=403)
+                return render(request, 'Vault/404.html', {'message': 'File deleted after 3 failed attempts.'}, status=403)
 
-            return HttpResponse("Invalid password", status=403)
+            return render(request, 'Vault/invalid.html', {'message': 'Invalid password'}, status=403)
 
         # Correct password; reset attempts
         request.session[session_key] = 0

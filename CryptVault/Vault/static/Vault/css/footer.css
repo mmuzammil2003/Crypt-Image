@@ -1,92 +1,289 @@
-
-/* Footer styling for CryptVault */
-footer {
-  background: linear-gradient(to right, #1a2a6c, #2a3a7c);
+/* Enhanced Footer styling for CryptVault */
+.site-footer {
+  background: #202842; /* Changed to solid darker blue color */
   color: #f8f9fa;
-  padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin-top: 3rem;
-  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
 }
 
-.footer-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 2rem 4rem;
-  flex-wrap: wrap;
+/* Add subtle pattern overlay */
+.site-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.5;
+  z-index: 0;
 }
 
-.footer-section {
-  padding: 0 1rem;
+.footer-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem 2rem;
+  display: table;
+  width: 90%;
 }
 
-.footer-section:first-child {
-  flex: 2;
+/* Restructured footer to use column-based layout like a table */
+.footer-primary {
+  display: table;
+  width: 100%;
+  margin-bottom: 2.5rem;
+  border-collapse: separate;
+  border-spacing: 0 1.5rem;
 }
 
-.footer-section h3 {
-  color: #ffffff;
-  margin-bottom: 0.8rem;
-  font-size: 1.4rem;
+.footer-brand {
+  display: table-row;
+}
+
+.footer-brand h3 {
+  font-size: 1.8rem;
+  margin: 0 0 0.5rem;
+  color: white;
+  font-weight: 700;
+  letter-spacing: 0.5px;
   position: relative;
   display: inline-block;
+  padding-bottom: 15px;
 }
 
-.footer-section h3::after {
+.footer-brand h3::after {
   content: '';
   position: absolute;
   left: 0;
-  bottom: -5px;
+  bottom: -2px;
   width: 50px;
+  height: 3px;
+  background: linear-gradient(90deg, #4CC9F0, #4361EE);
+  border-radius: 2px;
+}
+
+.footer-brand .tagline {
+  color: #d1d9e6;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  max-width: 300px;
+  line-height: 1.6;
+  padding-bottom: 1.5rem;
+}
+
+.footer-links {
+  display: table-row-group;
+  width: 100%;
+}
+
+.link-group {
+  display: table-cell;
+  padding: 0 20px 20px 0;
+  vertical-align: top;
+  min-width: 150px;
+  border-right: 1px dotted rgba(255, 255, 255, 0.1);
+}
+
+.link-group:last-child {
+  border-right: none;
+}
+
+.link-group h4 {
+  color: #ffffff;
+  font-size: 1.1rem;
+  margin-bottom: 1.2rem;
+  font-weight: 600;
+  position: relative;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.link-group h4::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 30px;
   height: 2px;
-  background-color: #4CC9F0;
+  background-color: rgba(76, 201, 240, 0.6);
 }
 
-.footer-section p {
-  margin: 0.6rem 0;
+.link-group ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.link-group ul li {
+  margin-bottom: 0.7rem;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.link-group ul li:last-child {
+  border-bottom: none;
+}
+
+.link-group ul li a {
+  color: #bdc3c7;
+  text-decoration: none;
   font-size: 0.95rem;
-  line-height: 1.4;
+  transition: all 0.3s ease;
+  display: inline-block;
+  position: relative;
 }
 
-.footer-section a {
+.link-group ul li a:hover {
+  color: #4CC9F0;
+  padding-left: 5px;
+}
+
+.footer-secondary {
+  display: table;
+  width: 100%;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 2rem;
+  margin-top: 1rem;
+}
+
+.contact-information,
+.legal-information {
+  display: table-cell;
+  padding: 0 20px 20px 0;
+  vertical-align: top;
+  width: 50%;
+}
+
+.contact-information h4,
+.legal-information h4 {
+  color: #ffffff;
+  font-size: 1.1rem;
+  margin-bottom: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.contact-information address {
+  font-style: normal;
+  line-height: 1.6;
+  color: #bdc3c7;
+  font-size: 0.95rem;
+}
+
+.contact-information address p {
+  margin-bottom: 0.7rem;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.contact-information address p:last-child {
+  border-bottom: none;
+}
+
+.contact-information address a {
   color: #4CC9F0;
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
-.footer-section a:hover {
+.contact-information address a:hover {
   color: #ffffff;
   text-decoration: underline;
 }
 
+.legal-information ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.legal-information ul li {
+  margin-bottom: 0.7rem;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.legal-information ul li:last-child {
+  border-bottom: none;
+}
+
+.legal-information ul li a {
+  color: #bdc3c7;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.legal-information ul li a:hover {
+  color: #4CC9F0;
+  padding-left: 5px;
+}
+
 .footer-bottom {
   background-color: rgba(0, 0, 0, 0.3);
-  padding: 1rem 0;
+  padding: 1.5rem 0;
   text-align: center;
-  font-size: 0.85rem;
+  margin-top: 2rem;
+  display: table-row;
+  width: 100%;
 }
 
 .footer-bottom p {
-  margin: 0;
-  color: #d1d1d1;
+  margin: 0.3rem 0;
+  color: #a0a0a0;
+  font-size: 0.85rem;
 }
 
 /* Responsive adjustments */
 @media screen and (max-width: 768px) {
-  .footer-content {
-    flex-direction: column;
-    text-align: center;
-    padding: 2rem;
+  .footer-primary,
+  .footer-secondary {
+    display: block;
   }
   
-  .footer-section {
-    margin-bottom: 1.5rem;
+  .footer-brand,
+  .link-group,
+  .contact-information,
+  .legal-information {
+    display: block;
     width: 100%;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    text-align: center;
   }
   
-  .footer-section h3::after {
+  .footer-brand h3::after,
+  .link-group h4::after {
     left: 50%;
     transform: translateX(-50%);
   }
+  
+  .footer-container {
+    padding: 2rem 1rem;
+    display: block;
+  }
+  
+  .footer-bottom {
+    display: block;
+  }
+}
+
+/* Added animation for hover effects */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.footer-brand h3:hover {
+  animation: pulse 1.5s infinite;
+  color: #4CC9F0;
 }
